@@ -1,0 +1,46 @@
+# requires libtiff-tools tiffcp tiff2pdf tesseract-ocr exactimage?
+
+fileroot='weber_1953'
+
+
+# Convert pdf to pbm format with 300dpi
+pdftoppm -r 300 -mono ~/Desktop/$fileroot.pdf $fileroot
+
+# Split each sheet into two pages
+for i in {2..24};
+do
+  p1=$(($i*2 -4))
+  p2=$(($i*2 -3))
+
+  unpaper --layout double -output-pages 2 \
+    weber_1953-`printf %02d $i`.pbm out`printf %02d $p1`.pbm out`printf %02d $p2`.pbm
+done
+
+# Remove the first page
+rm out00.pbm
+
+for f in `ls out??.pbm`;
+do
+  # Convert all others to tif format, then discard
+  convert -density 300 -units PixelsPerInch $f $f.tif && rm $f
+
+  # Get OCR data for each image and output a searchable PDF
+  tesseract -l eng -psm 1 $f.tif $f hocr
+  hocr2pdf -i $f.tif -s -o $f.pdf < $f.html  &&  \
+    rm $f $f.tif $f.html
+
+done
+
+# Combine all pdfs into a multipage PDF
+pdftk out??.pbm.pdf output ${fileroot}_ocr.pdf && rm out??.pbm.pdf
+
+exit;
+
+
+
+# Convert set of tifs into one multi-page tif
+#tiffcp out??.pbm.tif result.tif && rm -f out??.pbm.tif
+
+# Convert multi-page tif into pdf format
+#tiff2pdf result.tif -o result.pdf
+
