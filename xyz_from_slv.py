@@ -19,6 +19,9 @@ def slv2xyz(infile):
     with open(infile, 'r') as fin:
         with open('myout.xyz', 'w') as fout:
 
+            a = None
+            b = None
+            c = None
             Nx = None
             Ny = None
             Nz = None
@@ -28,13 +31,17 @@ def slv2xyz(infile):
             for line in fin:
 
                 # Get grid specs
+                if line[0:4]=='CELL':
+                    _, a, b, c, alpha, beta, gamma = line.split()
+                    a,b,c = map(float, [a,b,c])
+
                 if line[0:4]=='SIZE':
                     _, Nx, Ny, Nz = line.split()
                     Nx,Ny,Nz = map(int, [Nx,Ny,Nz])
 
-                    xarr_edges = np.linspace(0, 15.3073, Nx+1)
-                    yarr_edges = np.linspace(0, 15.3950, Ny+1)
-                    zarr_edges = np.linspace(0, 18.4260, Nz+1)
+                    xarr_edges = np.linspace(0, a, Nx+1)
+                    yarr_edges = np.linspace(0, b, Ny+1)
+                    zarr_edges = np.linspace(0, c, Nz+1)
 
                     xarr = 0.5 * (xarr_edges[1:] + xarr_edges[:-1])
                     yarr = 0.5 * (yarr_edges[1:] + yarr_edges[:-1])
