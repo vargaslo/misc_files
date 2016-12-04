@@ -1,12 +1,14 @@
-# This script writes a dummy xyz file to be read in VMD
+# This script writes two dummy xyz files to be read in VMD
 # Use: python xyz_from_slv.py  myslv.slv
 #
 # The input is a .slv file generated from Platon's SolvF3D function
 #
 # For VMD, try using QuickSurf representation:
-# mol new myout.xyz
+# mol new myout1.xyz
 # mol modstyle 0 0 QuickSurf  0.1  1.5  0.5  3.0
-
+#
+# Try both files to see which representation is more useful
+# output files: myout0.xyz AND myout1.xyz
 
 import numpy as np
 import shutil
