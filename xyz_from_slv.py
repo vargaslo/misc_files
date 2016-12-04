@@ -1,5 +1,5 @@
 # This script writes a dummy xyz file to be read in VMD
-# Use: python xyz_from_slv.xyz  myslv.slv
+# Use: python xyz_from_slv.py  myslv.slv
 #
 # The input is a .slv file generated from Platon's SolvF3D function
 #
