@@ -38,56 +38,61 @@ def frac2xyzM(crystal_prms):
 
 def slv2xyz(infile):
     with open(infile, 'r') as fin:
-        with open('myout.xyz', 'w') as fout:
+        with open('myout0.xyz', 'w') as fout0:
+            with open('myout1.xyz', 'w') as fout1:
 
-            Nx = None
-            Ny = None
-            Nz = None
-            j = 0
-            ones = 0
+                Nx = None
+                Ny = None
+                Nz = None
+                j = 0
+                ones = 0
+                zeros = 0
 
-            for line in fin:
+                for line in fin:
 
-                # Get grid specs
-                if line[0:4]=='CELL':
-                    _, a, b, c, alpha, beta, gamma = line.split()
-                    a,b,c, alpha, beta, gamma = map(float, [a,b,c, alpha, beta, gamma])
+                    # Get grid specs
+                    if line[0:4]=='CELL':
+                        _, a, b, c, alpha, beta, gamma = line.split()
+                        a,b,c, alpha, beta, gamma = map(float, [a,b,c, alpha, beta, gamma])
 
-                    # tranformation matrix to convert fractional to Cartesian
-                    crystal = {}
-                    crystal['a'] = a
-                    crystal['b'] = b
-                    crystal['c'] = c
-                    crystal['alpha'] = alpha
-                    crystal['beta'] = beta
-                    crystal['gamma'] = gamma
-                    M = frac2xyzM(crystal)
+                        # tranformation matrix to convert fractional to Cartesian
+                        crystal = {}
+                        crystal['a'] = a
+                        crystal['b'] = b
+                        crystal['c'] = c
+                        crystal['alpha'] = alpha
+                        crystal['beta'] = beta
+                        crystal['gamma'] = gamma
+                        M = frac2xyzM(crystal)
 
-                if line[0:4]=='SIZE':
-                    _, Nx, Ny, Nz = line.split()
-                    Nx,Ny,Nz = map(int, [Nx,Ny,Nz])
+                    if line[0:4]=='SIZE':
+                        _, Nx, Ny, Nz = line.split()
+                        Nx,Ny,Nz = map(int, [Nx,Ny,Nz])
 
-                    # fractional coordinates
-                    xarr_edges = np.linspace(0, 1, Nx+1)
-                    yarr_edges = np.linspace(0, 1, Ny+1)
-                    zarr_edges = np.linspace(0, 1, Nz+1)
+                        # fractional coordinates
+                        xarr_edges = np.linspace(0, 1, Nx+1)
+                        yarr_edges = np.linspace(0, 1, Ny+1)
+                        zarr_edges = np.linspace(0, 1, Nz+1)
 
-                    xarr = 0.5 * (xarr_edges[1:] + xarr_edges[:-1])
-                    yarr = 0.5 * (yarr_edges[1:] + yarr_edges[:-1])
-                    zarr = 0.5 * (zarr_edges[1:] + zarr_edges[:-1])
+                        xarr = 0.5 * (xarr_edges[1:] + xarr_edges[:-1])
+                        yarr = 0.5 * (yarr_edges[1:] + yarr_edges[:-1])
+                        zarr = 0.5 * (zarr_edges[1:] + zarr_edges[:-1])
 
-                # Split line into characters
-                chars = list(line.rstrip())
+                    # Split line into characters
+                    chars = list(line.rstrip())
 
-                # Process line if it contains void data
-                if len(chars)==Nx:
-                    for i, char in enumerate(chars):
-                        if char=='1':
+                    # Process line if it contains void data
+                    if len(chars)==Nx:
+                        for i, char in enumerate(chars):
                             x,y,z = np.dot(M, np.array([xarr[i], yarr[j%Ny], zarr[j//Ny]]))
-                            fout.write('{} {} {} {}\n'.format('C', x, y, z))
-                            ones +=1
-                    j+=1
-    return ones
+                            if char=='0':
+                                fout0.write('{} {} {} {}\n'.format('C', x, y, z))
+                                zeros +=1
+                            if char=='1':
+                                fout1.write('{} {} {} {}\n'.format('C', x, y, z))
+                                ones +=1
+                        j+=1
+    return ones, zeros
 
 
 def prepend(string, infile):
@@ -106,5 +111,6 @@ def prepend(string, infile):
 
 
 infile = sys.argv[1]
-ones = slv2xyz(infile)
-prepend('{}'.format(ones), 'myout.xyz')
+ones, zeros = slv2xyz(infile)
+prepend('{}'.format(zeros), 'myout0.xyz')
+prepend('{}'.format(ones), 'myout1.xyz')
