@@ -13,10 +13,10 @@ pdftoppm -r 300 -mono ~/Desktop/$fileroot.pdf $fileroot
 #  p2=$(($i*2 -3))
 #
 #  unpaper --layout double -output-pages 2 \
-#    weber_1953-`printf %02d $i`.pbm out`printf %02d $p1`.pbm out`printf %02d $p2`.pbm
+#    weber_1953-$(printf %02d $i).pbm out$(printf %02d $p1).pbm out$(printf %02d $p2).pbm
 #done
 
-for f in `ls out??.pbm`;
+for f in $(ls out??.pbm);
 do
   # Convert all others to tif format, then discard
   convert -density 300 -units PixelsPerInch $f $f.tif && rm $f
