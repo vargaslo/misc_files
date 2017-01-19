@@ -27,7 +27,7 @@ do
 done
 
 # Combine all pdfs into a multipage PDF
-pdftk out??.pbm.pdf output ${fileroot}_ocr.pdf && rm out??.pbm.pdf
+pdftk ${fileroot}-*.p?m.pdf output ${fileroot}_ocr.pdf
 
 exit;
 
