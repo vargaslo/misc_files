@@ -16,9 +16,6 @@ pdftoppm -r 300 -mono ~/Desktop/$fileroot.pdf $fileroot
 #    weber_1953-`printf %02d $i`.pbm out`printf %02d $p1`.pbm out`printf %02d $p2`.pbm
 #done
 
-# Remove the first page
-rm out00.pbm
-
 for f in `ls out??.pbm`;
 do
   # Convert all others to tif format, then discard
