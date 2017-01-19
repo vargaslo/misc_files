@@ -24,10 +24,8 @@ do
   # Convert all others to tif format, then discard
   convert -density 300 -units PixelsPerInch $f $f.tif && rm $f
 
-  # Get OCR data for each image and output a searchable PDF
-  tesseract -l eng -psm 1 $f.tif $f hocr
-  hocr2pdf -i $f.tif -s -o $f.pdf < $f.html  &&  \
-    rm $f $f.tif $f.html
+  # Use OCR for each image and output a searchable PDF
+  tesseract -l eng -psm 1 $f.tif $f pdf
 
 done
 
