@@ -6,15 +6,15 @@ fileroot='weber_1953'
 # Convert pdf to pbm format with 300dpi
 pdftoppm -r 300 -mono ~/Desktop/$fileroot.pdf $fileroot
 
-# Split each sheet into two pages
-for i in {2..24};
-do
-  p1=$(($i*2 -4))
-  p2=$(($i*2 -3))
-
-  unpaper --layout double -output-pages 2 \
-    weber_1953-`printf %02d $i`.pbm out`printf %02d $p1`.pbm out`printf %02d $p2`.pbm
-done
+## Split each sheet into two pages if needed (left-facing and right-facing)
+#for i in {2..24};
+#do
+#  p1=$(($i*2 -4))
+#  p2=$(($i*2 -3))
+#
+#  unpaper --layout double -output-pages 2 \
+#    weber_1953-`printf %02d $i`.pbm out`printf %02d $p1`.pbm out`printf %02d $p2`.pbm
+#done
 
 # Remove the first page
 rm out00.pbm
