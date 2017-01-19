@@ -22,7 +22,7 @@ do
   #convert -density 300 -units PixelsPerInch $f $f.tif && rm $f
 
   # Use OCR for each image and output a searchable PDF
-  tesseract $f $f -l eng -psm 1 pdf
+  tesseract $f $f -l eng -psm 1 -c tessedit_create_pdf=1
 
 done
 
