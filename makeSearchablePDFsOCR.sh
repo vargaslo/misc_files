@@ -19,7 +19,7 @@ pdftoppm -r 300 -mono ~/Desktop/$fileroot.pdf $fileroot
 for f in $(ls out??.pbm);
 do
   # Convert all others to tif format, then discard
-  convert -density 300 -units PixelsPerInch $f $f.tif && rm $f
+  #convert -density 300 -units PixelsPerInch $f $f.tif && rm $f
 
   # Use OCR for each image and output a searchable PDF
   tesseract -l eng -psm 1 $f.tif $f pdf
