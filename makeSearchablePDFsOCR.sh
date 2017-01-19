@@ -16,7 +16,7 @@ pdftoppm -r 300 -mono ~/Desktop/$fileroot.pdf $fileroot
 #    weber_1953-$(printf %02d $i).pbm out$(printf %02d $p1).pbm out$(printf %02d $p2).pbm
 #done
 
-for f in $(ls out??.pbm);
+for f in $(ls ${fileroot}-*.p?m);
 do
   # Convert all others to tif format, then discard
   #convert -density 300 -units PixelsPerInch $f $f.tif && rm $f
